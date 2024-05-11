@@ -1,14 +1,17 @@
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./App.css";
-import ResponsiveAppBar from "./ReponsiveAppBar";
-import Carousel from "./Carousel";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+
+const router = createBrowserRouter([
+  { path: "/", element: <Home /> },
+  { path: "/login", element: <Login /> },
+  { path: "/register", element: <Register /> },
+]);
 
 function App() {
-  return (
-    <>
-      <ResponsiveAppBar />
-      <Carousel />
-    </>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;
