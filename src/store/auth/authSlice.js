@@ -1,14 +1,15 @@
 // features/auth/authSlice.js
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import config from '../../config/config.json';
 
-const BACKEND_BASE_URL = "http://localhost:8080/api/v1";
+const backendUrl = config.BACKEND_BASE_URL;
 
 export const login = createAsyncThunk(
   "auth/login",
   async ({ email, password }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${BACKEND_BASE_URL}/auth/login`, {
+      const response = await axios.post(`${backendUrl}/auth/login`, {
         email,
         password,
       });

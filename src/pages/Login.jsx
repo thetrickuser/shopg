@@ -4,19 +4,23 @@ import Card from "react-bootstrap/Card";
 import Modal from "react-bootstrap/Modal";
 import Spinner from "react-bootstrap/Spinner";
 import { Container } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import * as yup from "yup";
+import { Link, useNavigate } from "react-router-dom";
+import { object, string } from "yup";
 import { Formik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import { login, reset } from "../store/auth/authSlice";
+import { useEffect } from "react";
 
-const schema = yup.object().shape({
-  email: yup.string().email("Invalid email").required("Required"),
-  password: yup.string().min(6, "Too Short!").required("Required"),
+const loginSchema = object().shape({
+  email: string().email("Invalid email").required("Required"),
+  password: string().min(6, "Too Short!").required("Required"),
 });
+
+const initialFormValues = { email: "", password: "" };
 
 const Login = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { status: authStatus, error: authError } = useSelector(
     (state) => state.auth
   );
@@ -27,6 +31,12 @@ const Login = () => {
     dispatch(login(values));
   };
 
+  useEffect(() => {
+    if (authStatus === "success") {
+      navigate("/");
+    }
+  }, [authStatus]);
+
   const resetAuth = () => dispatch(reset());
 
   return (
@@ -36,8 +46,8 @@ const Login = () => {
           <Card.Header>Login</Card.Header>
           <Card.Body>
             <Formik
-              initialValues={{ email: "", password: "" }}
-              validationSchema={schema}
+              initialValues={initialFormValues}
+              validationSchema={loginSchema}
               onSubmit={(values) => handleLogin(values)}
             >
               {({ errors, handleChange, handleSubmit, values, touched }) => (
@@ -98,35 +108,33 @@ const Login = () => {
         style={{ display: "block", position: "initial" }}
       >
         <Modal show={authStatus === "failed"} onHide={resetAuth}>
-          <Modal.Dialog>
-            <Modal.Header closeButton>
-              <Modal.Title>Login Failed</Modal.Title>
-            </Modal.Header>
+          <Modal.Header closeButton>
+            <Modal.Title>Login Failed</Modal.Title>
+          </Modal.Header>
 
-            <Modal.Body>
-              {errorField === "email" && (
-                <div>
-                  <p>{errorMessage}</p>
-                  <p>
-                    Please check your email. New User?{" "}
-                    <Link to={"/register"}>Register</Link>
-                  </p>
-                </div>
-              )}
-              {errorField === "password" && (
-                <div>
-                  <p>{errorMessage}</p>
-                  <p>Wrong Password</p>
-                </div>
-              )}
-            </Modal.Body>
+          <Modal.Body>
+            {errorField === "email" && (
+              <div>
+                <p>{errorMessage}</p>
+                <p>
+                  Please check your email. New User?{" "}
+                  <Link to={"/register"}>Register</Link>
+                </p>
+              </div>
+            )}
+            {errorField === "password" && (
+              <div>
+                <p>{errorMessage}</p>
+                <p>Wrong Password</p>
+              </div>
+            )}
+          </Modal.Body>
 
-            <Modal.Footer>
-              <Button variant="secondary" onClick={resetAuth}>
-                Close
-              </Button>
-            </Modal.Footer>
-          </Modal.Dialog>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={resetAuth}>
+              Close
+            </Button>
+          </Modal.Footer>
         </Modal>
       </div>
     </>
