@@ -8,8 +8,14 @@ import {
   Button,
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../store/auth/authSlice";
 
 const Header = () => {
+  const { user: authUser, status: authStatus } = useSelector(
+    (state) => state.auth
+  );
+  const dispatch = useDispatch();
   return (
     <Container fluid className="bg-body-tertiary p-2">
       <Row className="justify-content-center align-items-center">
@@ -28,7 +34,7 @@ const Header = () => {
         <Col md={2}>
           <Dropdown as={ButtonGroup}>
             <Button variant="success" as={Link} to={"/login"}>
-              Login
+              {authUser ? <span>{authUser.name}</span> : <span>Login</span>}
             </Button>
             <Dropdown.Toggle
               split
@@ -38,7 +44,15 @@ const Header = () => {
 
             <Dropdown.Menu>
               <Dropdown.Item>
-                New User? <Link to={"/register"}>Register</Link>
+                {authStatus === "success" ? (
+                  <Button variant="primary" onClick={() => dispatch(logout())}>
+                    Logout
+                  </Button>
+                ) : (
+                  <span>
+                    New User? <Link to={"/register"}>Register</Link>
+                  </span>
+                )}
               </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>

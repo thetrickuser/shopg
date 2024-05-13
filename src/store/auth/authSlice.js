@@ -1,7 +1,7 @@
 // features/auth/authSlice.js
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import config from '../../config/config.json';
+import config from "../../config/config.json";
 
 const backendUrl = config.BACKEND_BASE_URL;
 
@@ -13,6 +13,7 @@ export const login = createAsyncThunk(
         email,
         password,
       });
+      console.log(response.data);
       return response.data;
     } catch (err) {
       if (!err.response) {
@@ -36,6 +37,9 @@ const authSlice = createSlice({
     reset: () => {
       return initialState;
     },
+    logout: () => {
+      return initialState;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -44,14 +48,14 @@ const authSlice = createSlice({
       })
       .addCase(login.fulfilled, (state, action) => {
         state.status = "success";
-        state.user = action.payload;
+        state.user = action.payload.user;
       })
       .addCase(login.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.payload;
+        state.user = action.payload;
       });
   },
 });
 
-export const { reset } = authSlice.actions;
+export const { reset, logout } = authSlice.actions;
 export default authSlice.reducer;
