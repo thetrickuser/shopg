@@ -1,10 +1,13 @@
+import CategoryBar from "../components/CategoryBar";
 import Header from "../components/Header";
 import Hero from "../components/Hero";
+import RecommendedProducts from "../components/RecommendedProducts";
 
 const Home = () => {
   return (
     <>
-      <Header /> <Hero />
+      <Header /> <CategoryBar />
+      <RecommendedProducts />
     </>
   );
 };

@@ -22,13 +22,13 @@ const Header = () => {
   const dispatch = useDispatch();
   return (
     <Container fluid className="p-2">
-      <Row className="d-flex justify-content-around align-items-center">
-        <Col md={2} className="text-center fs-5">
+      <Row className="d-flex align-items-center">
+        <Col md={2} className="text-center fs-5 fw-bold justify-content-center">
           ShopG
         </Col>
-        <Col md={6}>
-          <Form className="d-flex">
-            <InputGroup>
+        <Col md={7}>
+          <Form>
+            <InputGroup className="d-flex justify-content-center">
               <InputGroup.Text className="rounded-start-5 bg-white fs-5">
                 <BsSearch />
               </InputGroup.Text>
@@ -41,7 +41,7 @@ const Header = () => {
             </InputGroup>
           </Form>
         </Col>
-        <Col md={2}>
+        <Col md={3} className="d-flex justify-content-end">
           <Dropdown as={ButtonGroup}>
             <Button
               className="bg-white text-dark border-0"
@@ -77,8 +77,6 @@ const Header = () => {
               </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
-        </Col>
-        <Col md={2}>
           <Button className="bg-white text-dark border-0">
             <div className="d-flex align-items-center gap-1">
               <span>
